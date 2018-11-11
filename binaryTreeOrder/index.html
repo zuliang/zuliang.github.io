@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>pow(x,n) - My Docs</title>
+  <title>二叉树遍历 - My Docs</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../css/theme.css" type="text/css" />
@@ -17,8 +17,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "pow(x,n)";
-    var mkdocs_page_input_path = "pow.md";
+    var mkdocs_page_name = "\u4e8c\u53c9\u6811\u904d\u5386";
+    var mkdocs_page_input_path = "binaryTreeOrder.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -58,26 +58,29 @@
     <a class="" href="../Algorithm/">Algorithm</a>
 	    </li>
           
+            <li class="toctree-l1">
+		
+    <a class="" href="../pow/">pow(x,n)</a>
+	    </li>
+          
             <li class="toctree-l1 current">
 		
-    <a class="current" href="./">pow(x,n)</a>
+    <a class="current" href="./">二叉树遍历</a>
     <ul class="subnav">
             
-    <li class="toctree-l2"><a href="#power-algorithm">power algorithm</a></li>
+    <li class="toctree-l2"><a href="#_1">二叉树节点定义如下</a></li>
     
-        <ul>
-        
-            <li><a class="toctree-l3" href="#_1">分治处理</a></li>
-        
-        </ul>
+
+    <li class="toctree-l2"><a href="#_2">前序遍历</a></li>
+    
+
+    <li class="toctree-l2"><a href="#_3">中序遍历</a></li>
+    
+
+    <li class="toctree-l2"><a href="#_4">后续遍历</a></li>
     
 
     </ul>
-	    </li>
-          
-            <li class="toctree-l1">
-		
-    <a class="" href="../binaryTreeOrder/">二叉树遍历</a>
 	    </li>
           
         </ul>
@@ -102,7 +105,7 @@
     
       
     
-    <li>pow(x,n)</li>
+    <li>二叉树遍历</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -112,33 +115,91 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="power-algorithm">power algorithm</h1>
-<h2 id="_1">分治处理</h2>
-<p>x和n是整数，以下算法复杂度为O(lgn),将阶乘一分为二递归，需要注意：
-1. n的奇偶情况
-2. n为负数这个坑</p>
-<pre><code class="python">def pow(x, n):
-    if n == 0:
-        return 1
-    if n &lt; 0:
-        return 1.0 / pow(x, -n)
-    if n % 2:
-        return x * pow(x, n-1)
-    else:
-        return pow(x*x, n/2)
+                <h2 id="_1">二叉树节点定义如下</h2>
+<pre><code class="python"># -*- encoding=utf-8
+class Node(object):
+    def __init__(self, val):
+        super(Node, self).__init__()
+        self.val = val
+        self.left = None
+        self.right = None
+</code></pre>
 
+<h2 id="_2">前序遍历</h2>
+<pre><code class="python">def preorder(node, res):
+    if not node:
+        return
+    res.append(node.val)
+    preorder(node.left, res)
+    preorder(node.right, res)
 
-def pow_nonrevcursive(x, n):
-    if n &lt; 0:
-        x = 1.0 / x
-        n = -n
-    powe = 1
-    while n:
-        if n &amp; 1:
-            powe *= x
-        x *= x
-        n &gt;&gt;= 1
-    return powe
+def preorderNonRecursive(root):
+    s = []
+    res = []
+    node = root
+    while s or node:
+        if node:
+            res.append(node.val)
+        if not node:
+            node = s.pop()
+            node = node.right
+        elif node.left:
+            s.append(node)
+            node = node.left
+        else:
+            node = node.right
+    return res
+</code></pre>
+
+<h2 id="_3">中序遍历</h2>
+<pre><code class="python">def inorder(node, res):
+    if node.left:
+        inorder(node.left, res)
+    res.append(node.val)
+    if node.right:
+        inorder(node.right, res)
+
+def inorderNonRecursive(root):
+    node = root
+    res = []
+    s = []
+    while s or node:
+        if not node:
+            node = s.pop()
+            res.append(node.val)
+            node = node.right
+        elif node.left:
+            s.append(node)
+            node = node.left
+        else:
+            res.append(node.val)
+            node = node.right
+    return res
+</code></pre>
+
+<h2 id="_4">后续遍历</h2>
+<pre><code class="python">def postorder(node, res):
+    if not node:
+        return
+    postorder(node.left, res)
+    postorder(node.right, res)
+    res.append(node.val)
+
+def postorderNonRecursive(root):
+    s = []
+    res = []
+    node = root
+    while s or node:
+        if not node:
+            node = s.pop()
+            res.append(node.val)
+            node = node.right
+        elif node.left:
+            s.append(node)
+            node = node.left
+        else:
+            s.append(node)
+            node = node.right
 </code></pre>
               
             </div>
@@ -147,10 +208,8 @@ def pow_nonrevcursive(x, n):
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../binaryTreeOrder/" class="btn btn-neutral float-right" title="二叉树遍历">Next <span class="icon icon-circle-arrow-right"></span></a>
       
-      
-        <a href="../Algorithm/" class="btn btn-neutral" title="Algorithm"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../pow/" class="btn btn-neutral" title="pow(x,n)"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -176,10 +235,8 @@ def pow_nonrevcursive(x, n):
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../Algorithm/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../pow/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
-      
-        <span style="margin-left: 15px"><a href="../binaryTreeOrder/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
