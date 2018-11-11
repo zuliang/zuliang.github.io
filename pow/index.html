@@ -65,6 +65,12 @@
             
     <li class="toctree-l2"><a href="#power-algorithm">power algorithm</a></li>
     
+        <ul>
+        
+            <li><a class="toctree-l3" href="#_1">分治处理</a></li>
+        
+        </ul>
+    
 
     </ul>
 	    </li>
@@ -102,6 +108,10 @@
             <div class="section">
               
                 <h1 id="power-algorithm">power algorithm</h1>
+<h2 id="_1">分治处理</h2>
+<p>x和n是整数，以下算法复杂度为O(lgn),将阶乘一分为二递归，需要注意：
+1. n的奇偶情况
+2. n为负数这个坑</p>
 <pre><code class="python">def pow(x, n):
     if n == 0:
         return 1
